@@ -36,7 +36,7 @@
 import struct
 import sys  # Only used to detect python version using sys.version_info
 
-from scripts.ROBODK.robodk import *
+from library.ROBODK.robodk import *
 
 # Tree item types
 ITEM_TYPE_STATION = 1
