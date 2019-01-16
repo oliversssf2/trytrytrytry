@@ -32,6 +32,7 @@ RDK.Render(False)
 
 # Promt the user to select a robot (if only one robot is available it will select that robot automatically)
 robot = RDK.ItemUserPick('Select a robot', ITEM_TYPE_ROBOT)
+robot.setJoints([0,-90,-90,0,90,0])
 #frame = RDK.ItemUserPick('Select a frame', ITEM_TYPE_FRAME)
 
 # Turn rendering ON before starting the simulation
@@ -62,7 +63,7 @@ print(Pose_2_TxyzRxyz(pose_ref))
 frame = RDK.Item('Object')
 #frame.setPose(TxyzRxyz_2_Pose([474.430,-109.000,607.850,-69.282,69.282,-69.282]))
 #frame.setPose(transl(474.430,-109.000,607,850)*rotx(-69.282)*roty(69.282)*rotz(-69.282))
-object_curve = RDK.AddCurve(POINTS)
+object_curve = RDK.AddCurve(POINTS,5)
 object_curve.setParent(frame)
 
 # Alternatively, we can project the points on the object surface
