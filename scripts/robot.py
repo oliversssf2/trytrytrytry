@@ -8,7 +8,7 @@ import csv
 
 #Import csv file to array
 POINTS = []
-with open('..\prefab\depth_215.csv') as csvfile:
+with open('..\prefab\DE3CB2~1.CSV') as csvfile:
     reader = csv.reader(csvfile, quoting=csv.QUOTE_NONNUMERIC) # change contents to floats
     for row in reader: # each row is a list
         POINTS.append(row)
