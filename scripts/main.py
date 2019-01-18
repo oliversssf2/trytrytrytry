@@ -6,6 +6,7 @@ import numpy as np
 import array
 import csv
 
+
 pipeline = rs.pipeline()
 config = rs.config()
 config.enable_stream(rs.stream.depth, 640, 360, rs.format.z16, 30)
@@ -66,3 +67,4 @@ finally:
     pipeline.stop()
     #rs.rs2_deproject_pixel_to_point()
     #def save_pointcloud_to_disk(arg0: rs.intrinsics, )
+
