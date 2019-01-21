@@ -2,7 +2,6 @@ import pyrealsense2 as rs
 import cv2
 import numpy as np
 
-
 pipeline = rs.pipeline()
 cfg = pipeline.start()
 profile = cfg.get_stream(rs.stream.depth)
@@ -80,4 +79,5 @@ finally:
     pipeline.stop()
     #rs.rs2_deproject_pixel_to_point()
     #def save_pointcloud_to_disk(arg0: rs.intrinsics, )
+
 
