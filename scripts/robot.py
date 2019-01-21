@@ -2,21 +2,23 @@
 
 # ---------------------------------------------------
 # --------------- PROGRAM START ---------------------
-from library.ROBODK.robolink import *
-from library.ROBODK.robodk import *
+from robolink import *  # API to communicate with RoboDK
+from robodk import *  # basic library for robots operations
 import csv
 
-#Import csv file to array
+#file names:
+# DE3CB2~1.CSV
+#depth_215 - 複製.csv
+
+#Import csv file(containning points) to array
 POINTS = []
-with open('..\prefab\depth_215.csv') as csvfile:
+with open('D:\phoebe\Desktop\DE3CB2~1.CSV') as csvfile:
     reader = csv.reader(csvfile, quoting=csv.QUOTE_NONNUMERIC) # change contents to floats
     for row in reader: # each row is a list
         POINTS.append(row)
 
 # Default parameters:
 P_START = POINTS[0]   # Start point with respect to the robot base frame
-#P_END = POINTS[2390]  # End point with respect to the robot base frame
-#NUM_POINTS = 2390  # Number of points to interpolate
 
 # Initialize the RoboDK API
 RDK = Robolink()
@@ -32,7 +34,12 @@ RDK.Render(False)
 
 # Promt the user to select a robot (if only one robot is available it will select that robot automatically)
 robot = RDK.ItemUserPick('Select a robot', ITEM_TYPE_ROBOT)
-#frame = RDK.ItemUserPick('Select a frame', ITEM_TYPE_FRAME)
+# Set the initial joints of the robot
+robot.setJoints([0,-90,-90,0,90,0])
+#robot.setPose(TxyzRxyz_2_Pose([0, 0, 0, 0, 0, 180]))
+
+# A reference frame of the object(already set)
+frame = RDK.Item('Object')
 
 # Turn rendering ON before starting the simulation
 RDK.Render(True)
@@ -46,24 +53,26 @@ reference = robot.Parent()
 
 # Use the robot base frame as the active reference
 robot.setPoseFrame(reference)
+#tool.setPose(transl(474.430,-109.000,607.850)*rotx(-69.282)*roty(69.282)*rotz(-69.282))
 
 # get the current orientation of the robot (with respect to the active reference frame and tool frame)
 pose_ref = robot.Pose()
-print(Pose_2_TxyzRxyz(pose_ref))
+
 # a pose can also be defined as xyzwpr / xyzABC
 # pose_ref = TxyzRxyz_2_Pose([100,200,300,0,0,pi])
 
 
-# Option 5: Create a follow points project (similar to Option 4)
-
-# First we need to create an object from the provided points or add the points to an existing object and optionally project them on the surface
+# Create a follow curve project
 
 # Create a new object given the list of points:
-frame = RDK.Item('Object')
+object = RDK.Item('Object', ITEM_TYPE_OBJECT)
+object_curve = object.AddCurve(POINTS, PROJECTION_ALONG_NORMAL_RECALC)
+#object_curve = RDK.AddCurve(POINTS)
+#The object curve is relative to the frame "object" that has been set already
+object_curve.setParent(frame)
 #frame.setPose(TxyzRxyz_2_Pose([474.430,-109.000,607.850,-69.282,69.282,-69.282]))
 #frame.setPose(transl(474.430,-109.000,607,850)*rotx(-69.282)*roty(69.282)*rotz(-69.282))
-object_curve = RDK.AddCurve(POINTS)
-object_curve.setParent(frame)
+
 
 # Alternatively, we can project the points on the object surface
 #object = RDK.Item('Object', ITEM_TYPE_OBJECT)
