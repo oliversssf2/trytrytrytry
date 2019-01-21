@@ -53,17 +53,29 @@ try:
             tem = [0, 0]
             width = depth_frame.get_width()
             height = depth_frame.get_height()
-            for i in range(0, width, 5):
-                for j in range(0, height, 5):
-                    depth = depth_frame.get_distance(i,j)
-                    if depth > 0 and depth < 0.5:
-                        coord = rs.rs2_deproject_pixel_to_point(intr, [i,j], depth)
-                        f.write(str(coord[0] * 1000))
-                        f.write(',')
-                        f.write(str(coord[1] * 1000))
-                        f.write(',')
-                        f.write(str(coord[2] * 1000))
-                        f.write('\n')
+            for i in range(0, height, 5):
+                if i%2 == 0:
+                    for j in range(0, width, 5):
+                        depth = depth_frame.get_distance(j,i)
+                        if depth > 0 and depth < 1:
+                            coord = rs.rs2_deproject_pixel_to_point(intr, [j,i], depth)
+                            f.write(str(coord[0] * 1000))
+                            f.write(',')
+                            f.write(str(coord[1] * 1000))
+                            f.write(',')
+                            f.write(str(coord[2] * 1000))
+                            f.write('\n')
+                else:
+                    for j in range(width - 1, -1, -5):
+                        depth = depth_frame.get_distance(j, i)
+                        if depth > 0 and depth < 1:
+                            coord = rs.rs2_deproject_pixel_to_point(intr, [j, i], depth)
+                            f.write(str(coord[0] * 1000))
+                            f.write(',')
+                            f.write(str(coord[1] * 1000))
+                            f.write(',')
+                            f.write(str(coord[2] * 1000))
+                            f.write('\n')
 finally:
     pipeline.stop()
     #rs.rs2_deproject_pixel_to_point()
