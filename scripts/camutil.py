@@ -1,8 +1,9 @@
 import pyrealsense2 as rs
 
 def generate_csv_from_image(depth_frame: rs.depth_frame, intr, file_prefix = "depth_") :
-    filename = file_prefix + depth_frame.get_frame_number() + '.csv'
-    f = open(['..\prefab\CSVs\\', filename])
+    filename = file_prefix + str(depth_frame.get_frame_number()) + '.csv'
+    filedir = '..\prefab\CSVs\\' + filename
+    f = open(filedir, 'w+')
     # open the file to save pointcloud data
     width = depth_frame.get_width()
     # get the width of the depth image
@@ -43,3 +44,4 @@ def generate_csv_from_image(depth_frame: rs.depth_frame, intr, file_prefix = "de
                     f.write('\n')
         # iterate the image from left to right then to the left so the robotic arm will don't have to come back to the leftmost point after
         # scanning every single row
+    return filedir
