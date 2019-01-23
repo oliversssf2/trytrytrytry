@@ -1,6 +1,6 @@
 import pyrealsense2 as rs
 
-def generate_csv_from_image(depth_frame: rs.depth_frame, intr, file_prefix = "depth_") :
+def generate_csv_from_image(depth_frame: rs.depth_frame, intr, clipping_distance, file_prefix = "depth_") :
     filename = file_prefix + str(depth_frame.get_frame_number()) + '.csv'
     filedir = '..\prefab\CSVs\\' + filename
     f = open(filedir, 'w+')
@@ -16,7 +16,7 @@ def generate_csv_from_image(depth_frame: rs.depth_frame, intr, file_prefix = "de
                 # iterate from left to right in the row if it is in a 2k(even number) row
                 depth = depth_frame.get_distance(j, i)
                 # get the exact distance of the pixel being iterated
-                if depth > 0 and depth < 1:
+                if depth > 0 and depth < clipping_distance:
                     # if the distance of that pixel is in the clipping distance
                     coord = rs.rs2_deproject_pixel_to_point(intr, [j, i], depth)  # deproject the pixel
                     # transfer the pixel's 2D coordinate into a 3D coordinate according to camera
@@ -33,7 +33,7 @@ def generate_csv_from_image(depth_frame: rs.depth_frame, intr, file_prefix = "de
             for j in range(width - 1, -1, -5):
                 # iterate from rijght to left in the row if it is in a 2k+1(odd number) row
                 depth = depth_frame.get_distance(j, i)
-                if depth > 0 and depth < 1:
+                if depth > 0 and depth < clipping_distance:
                     coord = rs.rs2_deproject_pixel_to_point(intr, [j, i], depth)
                     f.write(str(coord[0] * 1000))
                     f.write(',')
