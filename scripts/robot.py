@@ -77,7 +77,7 @@ def start_simulation_with_file(filedir):
     prog.RunProgram()
 
     # Done
-    quit()
+    
 
 
 

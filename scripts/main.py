@@ -33,7 +33,7 @@ try:
     while True:
         frames = pipeline.wait_for_frames()
         #wait of a set of frame
-
+        clipping_distance = clipping_distance_in_meters / depth_scale
         aligned_frames = align.process(frames)
         #align those frames
 
@@ -65,10 +65,14 @@ try:
             cv2.destroyAllWindows()
             break
         if key == ord('h'):
-            current_CSV_direction = generate_csv_from_image(depth_frame, intr)
+            current_CSV_direction = generate_csv_from_image(depth_frame,  intr, clipping_distance_in_meters)
         if key == ord('s'):
             if current_CSV_direction != '':
                 start_simulation_with_file(current_CSV_direction)
+        if key == ord('j'):
+            clipping_distance_in_meters += 0.01
+        if key == ord('k'):
+            clipping_distance_in_meters -= 0.01
 
 finally:
     pipeline.stop() #stop the camera at last
