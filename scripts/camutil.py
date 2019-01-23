@@ -26,7 +26,7 @@ def generate_csv_from_image(depth_frame: rs.depth_frame, intr, clipping_distance
                     f.write(str(coord[1] * 1000))
                     f.write(' ,')
                     f.write(str(coord[2] * 1000))
-                    f.write(', 0, 0, 180')
+                    f.write(', 0, 0, -1')
                     # set the normal direction of each pixels
                     f.write('\n')
         else:
