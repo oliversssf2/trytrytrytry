@@ -2,13 +2,13 @@ from library.ROBODK.robolink import *
 from library.ROBODK.robodk import *
 import csv
 
-def start_simulation_with_file(filedir):
+def start_simulation_with_file(filedir):#pass the direction of the file into the function to proceed the simulation
     #Import csv file to array
     POINTS = []
     with open(filedir) as csvfile:
         reader = csv.reader(csvfile, quoting=csv.QUOTE_NONNUMERIC) # change contents to floats
         for row in reader: # each row is a list
-            POINTS.append(row)
+            POINTS.append(row)  
 
     # Default parameters:
     P_START = POINTS[0]   # Start point with respect to the robot base frame
@@ -76,8 +76,8 @@ def start_simulation_with_file(filedir):
     # Run the create program if success
     prog.RunProgram()
 
-    # Done
-    
+    #Done
+
 
 
 

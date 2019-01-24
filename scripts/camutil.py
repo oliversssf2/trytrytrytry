@@ -14,33 +14,33 @@ def generate_csv_from_image(depth_frame: rs.depth_frame, intr, clipping_distance
         if i % 2 == 0:
             for j in range(0, width, 5):
                 # iterate from left to right in the row if it is in a 2k(even number) row
-                depth = depth_frame.get_distance(j, i)
+                depth = depth_frame.get_distance(j, i)*1000
                 # get the exact distance of the pixel being iterated
                 if depth > 0 and depth < clipping_distance:
                     # if the distance of that pixel is in the clipping distance
                     coord = rs.rs2_deproject_pixel_to_point(intr, [j, i], depth)  # deproject the pixel
                     # transfer the pixel's 2D coordinate into a 3D coordinate according to camera
-                    f.write(str(coord[0] * 1000))
+                    f.write(str(coord[0]))
                     # save the 3d coodinate to a csv file
                     f.write(' ,')
-                    f.write(str(coord[1] * 1000))
+                    f.write(str(coord[1]))
                     f.write(' ,')
-                    f.write(str(coord[2] * 1000))
+                    f.write(str(coord[2]))
                     f.write(', 0, 0, -1')
                     # set the normal direction of each pixels
                     f.write('\n')
         else:
             for j in range(width - 1, -1, -5):
                 # iterate from rijght to left in the row if it is in a 2k+1(odd number) row
-                depth = depth_frame.get_distance(j, i)
+                depth = depth_frame.get_distance(j, i)*1000
                 if depth > 0 and depth < clipping_distance:
                     coord = rs.rs2_deproject_pixel_to_point(intr, [j, i], depth)
-                    f.write(str(coord[0] * 1000))
+                    f.write(str(coord[0]))
                     f.write(',')
-                    f.write(str(coord[1] * 1000))
+                    f.write(str(coord[1]))
                     f.write(',')
-                    f.write(str(coord[2] * 1000))
-                    f.write(', 0,  0, 180')
+                    f.write(str(coord[2]))
+                    f.write(', 0,  0, -1')
                     f.write('\n')
         # iterate the image from left to right then to the left so the robotic arm will don't have to come back to the leftmost point after
         # scanning every single row
