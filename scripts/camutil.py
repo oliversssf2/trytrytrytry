@@ -16,7 +16,7 @@ def generate_csv_from_image(depth_frame: rs.depth_frame, intr, clipping_distance
                 # iterate from left to right in the row if it is in a 2k(even number) row
                 depth = depth_frame.get_distance(j, i)*1000
                 # get the exact distance of the pixel being iterated
-                if depth > 0 and depth < clipping_distance:
+                if depth > 0 and depth < (clipping_distance*1000):
                     # if the distance of that pixel is in the clipping distance
                     coord = rs.rs2_deproject_pixel_to_point(intr, [j, i], depth)  # deproject the pixel
                     # transfer the pixel's 2D coordinate into a 3D coordinate according to camera
@@ -33,7 +33,7 @@ def generate_csv_from_image(depth_frame: rs.depth_frame, intr, clipping_distance
             for j in range(width - 1, -1, -5):
                 # iterate from rijght to left in the row if it is in a 2k+1(odd number) row
                 depth = depth_frame.get_distance(j, i)*1000
-                if depth > 0 and depth < clipping_distance:
+                if depth > 0 and depth < (clipping_distance*1000):
                     coord = rs.rs2_deproject_pixel_to_point(intr, [j, i], depth)
                     f.write(str(coord[0]))
                     f.write(',')

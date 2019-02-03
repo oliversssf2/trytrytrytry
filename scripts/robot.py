@@ -57,7 +57,7 @@ def start_simulation_with_file(filedir):#pass the direction of the file into the
 
     # Create a new object given the list of points:
     frame = RDK.Item('Object')
-    #frame.setPose(TxyzRxyz_2_Pose([474.430,-109.000,607.850,-69.282,69.282,-69.282]))
+    #frame.setPose(TxyzRxyz_2_Pose([474.430,-109.,607.850,-69.282,69.282,-69.282]))
     #frame.setPose(transl(474.430,-109.000,607,850)*rotx(-69.282)*roty(69.282)*rotz(-69.282))
     object_curve = RDK.AddCurve(POINTS)
     object_curve.setParent(frame)
@@ -77,7 +77,5 @@ def start_simulation_with_file(filedir):#pass the direction of the file into the
     prog.RunProgram()
 
     #Done
-
-
 
 

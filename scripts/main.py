@@ -6,14 +6,14 @@ from scripts.robot import *
 #import libraries
 
 pipeline = rs.pipeline()
-cfg = pipeline.start()
-#save the configuration imformation of the realsense camera to access the camera later
-profile = cfg.get_stream(rs.stream.depth)
+pipe_profile = pipeline.start()
+#save the configuration imformation of the realsense cateramera to access the camera l
+profile = pipe_profile.get_stream(rs.stream.depth)
 #get stream profile
 intr = profile.as_video_stream_profile().get_intrinsics()
 #get the intrinsic values(size, fov, principle point of projection etc.) of the camera
 
-depth_sensor: rs.sensor = cfg.get_device().first_depth_sensor()
+depth_sensor: rs.sensor = pipe_profile.get_device().first_depth_sensor()
 depth_scale = depth_sensor.get_depth_scale()
 #get the depth scale of the depth camera to calculate the distance in the real world
 
@@ -21,7 +21,7 @@ align_to = rs.stream.color
 align = rs.align(align_to)
 #align the depth stream to color stream
 
-clipping_distance_in_meters = 1
+clipping_distance_in_meters = 0.4
 #set the threshold of image clipping in meter
 clipping_distance = clipping_distance_in_meters / depth_scale
 #transform the distance according to the depth scale
@@ -50,7 +50,7 @@ try:
         bg_removed = np.where((depth_image > clipping_distance) | (depth_image <= 0), 0, depth_image)
         #clip the object out of the depth image according to clipping distance
 
-        depth_colormap = cv2.applyColorMap(cv2.convertScaleAbs(bg_removed, alpha = 0.3), cv2.COLORMAP_JET)
+        depth_colormap = cv2.applyColorMap(cv2.convertScaleAbs(bg_removed, alpha = 0.3), cv2.COLORMAP_HOT)
         #colorize the clipped depth image
         display_image = np.column_stack((color_image, depth_colormap))
 
@@ -73,6 +73,16 @@ try:
             clipping_distance_in_meters += 0.01
         if key == ord('k'):
             clipping_distance_in_meters -= 0.01
+        if key == ord('4'):
+            clipping_distance_in_meters = 0.4
+        if key == ord('1'):
+            clipping_distance_in_meters = 1
+        if key == ord('6'):
+            clipping_distance_in_meters = 0.6
+        if key == ord('8'):
+            clipping_distance_in_meters = 0.8
+        if key == ord('2'):
+            clipping_distance_in_meters = 2
 
 finally:
     pipeline.stop() #stop the camera at last
