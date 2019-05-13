@@ -1,8 +1,8 @@
 import pyrealsense2 as rs
 import cv2
 import numpy as np
-from scripts.camutil import *
-from scripts.robot import *
+from camutil import *
+from robot import *
 #import libraries
 
 pipeline = rs.pipeline()
@@ -13,14 +13,14 @@ profile = pipe_profile.get_stream(rs.stream.depth)
 intr = profile.as_video_stream_profile().get_intrinsics()
 #get the intrinsic values(size, fov, principle point of projection etc.) of the camera
 
-depth_sensor: rs.sensor = pipe_profile.get_device().first_depth_sensor()
+#depth_sensor: rs.sensor = pipe_profile.get_device().first_depth_sensor()
+depth_sensor = pipe_profile.get_device().first_depth_sensor()
 depth_scale = depth_sensor.get_depth_scale()
 #get the depth scale of the depth camera to calculate the distance in the real world
 
 align_to = rs.stream.color
 align = rs.align(align_to)
-#align the depth stream to color stream
-
+#align the depth stream to color streamd
 clipping_distance_in_meters = 0.4
 #set the threshold of image clipping in meter
 clipping_distance = clipping_distance_in_meters / depth_scale
@@ -38,10 +38,11 @@ try:
         #align those frames
 
         color_frame = aligned_frames.get_color_frame()
-        depth_frame: rs.depth_frame = aligned_frames.get_depth_frame()
+     #   depth_frame: rs.depth_frame = aligned_frames.get_depth_frame()
+        depth_frame = aligned_frames.get_depth_frame()
 
         if not depth_frame or not color_frame:
-            continue
+            continued
 
         depth_image = np.asanyarray(depth_frame.get_data())
         color_image = np.asanyarray(color_frame.get_data())
